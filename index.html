@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+	<title>GuidedTask Example</title>
+	<link rel="stylesheet" type="text/css" href="./guiders-1.1.1.css"/>
+	<style>
+	#container { 
+		margin:2em; 
+	}
+	fieldset {
+		float:left;
+		clear:left;
+		margin:.25em;
+	}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<fieldset id="area1">
+			<button id="button1">Button 1</button>
+		</fieldset>
+		<fieldset id="area2">
+			<button id="button2">Button 2</button>
+			<br/>
+			<button id="button3">Button 3 (skip 2)</button>
+		</fieldset>
+		<fieldset id="area3">
+			<button id="button4">Button 4</button>
+		</fieldset>
+	</div>
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+<script src="./lib/guided-task.js"></script>
+
+<script src="./lib/guiders-1.1.1.js"></script>
+
+<script>
+var guiderDispatch = $({unique:'guiderDispatch'});
+var dfns = [
+	{
+		id: 'alpha',
+		attachTo: '#area1',
+		title: 'Click `Button 1`',
+		description: "This is shown right away. If you click button2+ before button1 it'll be displayed again",
+		completeWhen: function(task) {
+			$(document).one('button1', function() {
+				task.markAsDone();
+			});
+		}
+	}, {
+		id: 'beta',
+		attachTo: '#area2',
+		title: 'Click `Button 2`',
+		description: "Click button2 or button3 and this will go away. If you click button4 first this will come back (after 1 is clicked)",
+		completeWhen: function(task) {
+			$(document).one('button2', function() {
+				task.markAsDone();
+			});
+			guiderDispatch.one('charlie.Done.GuidedTask', function() {
+				task.markAsDone();
+			});
+		}
+	}, {
+		id: 'charlie',
+		attachTo: '#area2',
+		title: 'Click `Button 3`',
+		description: "This will complete button2 and button3.",
+		completeWhen: function(task) {
+			$(document).one('button3', function() {
+				task.markAsDone();
+			});
+		}
+	}, {
+		id: 'delta',
+		attachTo: '#area3',
+		title: 'Click `Button 4`',
+		description: "You  havn't clicked button4 yet!",
+		completeWhen: function(task) {
+			$(document).one('button4', function() {
+				task.markAsDone();
+			});
+		}
+	}, {
+		id: 'finished',
+		position: 0,
+		overlay: false,
+		title: 'All tasks are done!',
+		description: "You've clicked all the buttons (or clicked 3 before 2).",
+		completeWhen: function(task) {
+			guiderDispatch.one('delta.Done.GuidedTask', function() {
+				task.markAsDone();
+			});
+		}
+	}
+];
+
+$(document).ready(function () {
+	var list = new GuidedTaskList(dfns, guiderDispatch);
+	list.showNextTask();
+	
+	$('button').click(function() {
+		$(document).trigger($(this).attr('id'));
+	});
+});
+</script>
+
+</body>
+</html>
+
+
