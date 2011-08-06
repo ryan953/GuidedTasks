@@ -1,5 +1,15 @@
 function GuidedTask(opts, dispatch) {
-	this.opts = $.extend(opts, GuidedTask.defaults);
+	var defaults = {
+		position: 2,
+		xButton: true,
+		buttons: [],
+		offset: {
+			top:-1.5 * 16,
+			left:0
+		},
+		completeWhen: function() {}
+	};
+	this.opts = $.extend(defaults, opts);
 	this.dispatch = dispatch;
 	
 	this.name = this.opts.id;
@@ -9,15 +19,6 @@ function GuidedTask(opts, dispatch) {
 	this.listenForCompleteAction();
 }
 (function() {
-	GuidedTask.defaults = {
-		position: 2,
-		xButton: true,
-		buttons: [],
-		offset: {
-			top:-1.5 * 16,
-			left:0
-		}
-	};
 	GuidedTask.prototype.getEvent = function(name) {
 		return [this.name, name, 'GuidedTask'].join('.');
 	};
@@ -26,7 +27,6 @@ function GuidedTask(opts, dispatch) {
 	};
 	GuidedTask.prototype.markAsDone = function(e) {
 		this.complete = true;
-		//$(this).trigger(this.getEvent('Done'));
 		this.dispatch.trigger(this.getEvent('Done'));
 	};
 	GuidedTask.prototype.listenForCompleteAction = function() {
@@ -63,6 +63,7 @@ function GuidedTaskList(task_dfns, dispatcher) {
 		var task = this.getNextIncompleteTask();
 		if (task) {
 			setTimeout(function() {
+				guiders.hideAll();
 				task.showHelp();
 			}, 1000);
 		}
