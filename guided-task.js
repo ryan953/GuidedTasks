@@ -63,7 +63,6 @@ function GuidedTaskList(task_dfns, dispatcher) {
 		var task = this.getNextIncompleteTask();
 		if (task) {
 			setTimeout(function() {
-				guiders.hideAll();
 				task.showHelp();
 			}, 1000);
 		}

@@ -82,15 +82,11 @@ var dfns = [
 		}
 	}, {
 		id: 'finished',
-		position: 0,
-		overlay: false,
+		overlay: true,
+		position:0,
 		title: 'All tasks are done!',
 		description: "You've clicked all the buttons (or clicked 3 before 2).",
-		completeWhen: function(task) {
-			guiderDispatch.one('delta.Done.GuidedTask', function() {
-				task.markAsDone();
-			});
-		}
+		buttons: [{name:'close'}]
 	}
 ];
 
