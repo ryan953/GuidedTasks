@@ -42,7 +42,7 @@ var dfns = [
 		attachTo: '#area1',
 		title: 'Click `Button 1`',
 		description: "This is shown right away. If you click button2+ before button1 it'll be displayed again",
-		completeWhen: function(task) {
+		init: function(task) {
 			$(document).one('button1', function() {
 				task.markAsDone();
 			});
@@ -52,7 +52,7 @@ var dfns = [
 		attachTo: '#area2',
 		title: 'Click `Button 2`',
 		description: "Click button2 or button3 and this will go away. If you click button4 first this will come back (after 1 is clicked)",
-		completeWhen: function(task) {
+		init: function(task) {
 			$(document).one('button2', function() {
 				task.markAsDone();
 			});
@@ -65,7 +65,7 @@ var dfns = [
 		attachTo: '#area2',
 		title: 'Click `Button 3`',
 		description: "This will complete button2 and button3.",
-		completeWhen: function(task) {
+		init: function(task) {
 			$(document).one('button3', function() {
 				task.markAsDone();
 			});
@@ -75,7 +75,7 @@ var dfns = [
 		attachTo: '#area3',
 		title: 'Click `Button 4`',
 		description: "You  havn't clicked button4 yet!",
-		completeWhen: function(task) {
+		init: function(task) {
 			$(document).one('button4', function() {
 				task.markAsDone();
 			});
@@ -91,7 +91,7 @@ var dfns = [
 ];
 
 $(document).ready(function () {
-	var list = new GuidedTaskList(dfns, guiderDispatch);
+	var list = new GuidedTask.List(dfns, guiderDispatch);
 	list.showNextTask();
 	
 	$('button').click(function() {
