@@ -59,12 +59,14 @@ function GuidedTask(opts, dispatch) {
 		}).shift();
 	};
 	GuidedTask.List.prototype.showNextTask = function() {
+		var self = this;
+		
 		guiders.hideAll();
-		var task = this.getNextIncompleteTask();
-		if (task) {
-			setTimeout(function() {
+		setTimeout(function() {
+			var task = self.getNextIncompleteTask();
+			if (task) {
 				task.showHelp();
-			}, 1000);
-		}
+			}
+		}, 1000);
 	};
 })();
